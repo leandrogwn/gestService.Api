@@ -11,11 +11,11 @@ export class UserController {
     }
 
     async one(request: Request, response: Response, next: NextFunction) {
-        const id = parseInt(request.params.id)
+        const uid = request.params.uid
 
 
         const user = await this.userRepository.findOne({
-            where: { id }
+            where: { uid }
         })
 
         if (!user) {
@@ -37,9 +37,9 @@ export class UserController {
     }
 
     async remove(request: Request, response: Response, next: NextFunction) {
-        const id = parseInt(request.params.id)
+        const uid = request.params.uid
 
-        let userToRemove = await this.userRepository.findOneBy({ id })
+        let userToRemove = await this.userRepository.findOneBy({ uid })
 
         if (!userToRemove) {
             return "this user not exist"

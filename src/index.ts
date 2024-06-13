@@ -29,11 +29,11 @@ AppDataSource.initialize().then(async () => {
 
     // start express server
     app.listen(3000)
-
+    
     // insert new users for test
     await AppDataSource.manager.save(
         AppDataSource.manager.create(User, {
-            firstName: "Timber",
+            name: "Timber",
             lastName: "Saw",
             age: 27
         })
@@ -41,7 +41,7 @@ AppDataSource.initialize().then(async () => {
 
     await AppDataSource.manager.save(
         AppDataSource.manager.create(User, {
-            firstName: "Phantom",
+            name: "Phantom",
             lastName: "Assassin",
             age: 24
         })
