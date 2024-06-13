@@ -1,53 +1,23 @@
-import { AppDataSource } from "../data-source"
-import { NextFunction, Request, Response } from "express"
+import { Request } from "express";
 import { User } from "../entity/User"
+import { BaseController } from "./BaseController"
 
-export class UserController {
+export class UserController extends BaseController<User> {
 
-    private userRepository = AppDataSource.getRepository(User)
-
-    async all(request: Request, response: Response, next: NextFunction) {
-        return this.userRepository.find()
+    constructor() {
+        super(User)
     }
 
-    async one(request: Request, response: Response, next: NextFunction) {
-        const uid = request.params.uid
-
-
-        const user = await this.userRepository.findOne({
-            where: { uid }
-        })
-
-        if (!user) {
-            return "unregistered user"
-        }
-        return user
-    }
-
-    async save(request: Request, response: Response, next: NextFunction) {
-        const { firstName, lastName, age } = request.body;
-
-        const user = Object.assign(new User(), {
-            firstName,
-            lastName,
-            age
-        })
-
-        return this.userRepository.save(user)
-    }
-
-    async remove(request: Request, response: Response, next: NextFunction) {
-        const uid = request.params.uid
-
-        let userToRemove = await this.userRepository.findOneBy({ uid })
-
-        if (!userToRemove) {
-            return "this user not exist"
-        }
-
-        await this.userRepository.remove(userToRemove)
-
-        return "user has been removed"
+    async save(request: Request) {
+        let _user = <User>request.body;
+        super.isRequired(_user.name, 'O nome do usuário é obrigatório');
+        super.isRequired(_user.photo, 'A foto do usuário é obrigatória');
+        super.isRequired(_user.email, 'O e-mail do usuário é obrigatório');
+        super.isRequired(_user.isRoot, 'Informar se usuário é administrador');
+        super.isRequired(_user.password, 'A senha do usuário é obrigatório');
+        super.isRequired(_user.active, 'Informar se o usuário esta ativo');
+        super.isRequired(_user.deleted, 'Informar se o usuário esta deletado');
+        return super.save(_user);
     }
 
 }
