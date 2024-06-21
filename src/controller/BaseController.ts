@@ -1,7 +1,8 @@
 import { Request } from 'express';
 import { AppDataSource } from '../data-source';
-import { Repository } from 'typeorm';
+import { Repository, FindOptionsWhere } from 'typeorm';
 import { BaseNotification } from '../entity/BaseNotification';
+import { User } from '../entity/User';
 
 export abstract class BaseController<T> extends BaseNotification {
     repository: Repository<T>;
@@ -16,7 +17,7 @@ export abstract class BaseController<T> extends BaseNotification {
     }
 
     async one() {
-        return this.repository.findOne({ where: {} });
+        return this.repository.findOne({delete: false} );
     }
 
     async save(model: any) {
